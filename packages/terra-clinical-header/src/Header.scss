@@ -1,14 +1,14 @@
 :local {
   .flex-header {
-    background-color: #f4f4f4;
-    border-bottom-color: #dedfe0;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
+    background-color: var(--terra-clinical-header-background-color, #f4f4f4);
+    border-bottom-color: var(--terra-clinical-header-border-bottom-color, #dedfe0);
+    border-bottom-style: var(--terra-clinical-header-border-bottom-style, solid);
+    border-bottom-width: var(--terra-clinical-header-border-bottom-width, 1px);
     display: flex;
     height: 3.587rem;
     justify-content: space-between;
     overflow: hidden;
-    padding: 0.714rem;
+    padding: var(--terra-clinical-header-padding, 0.714rem);
     position: relative;
     width: 100%;
   }
@@ -48,8 +48,8 @@
   }
 
   .title {
-    font-size: 1.285rem;
-    font-weight: normal;
+    font-size: var(--terra-clinical-header-title-font-size, 1.285rem);
+    font-weight: var(--terra-clinical-header-title-font-weight, normal);
     height: 100%;
     line-height: 1.75;
     margin-bottom: 0;
