@@ -1,13 +1,11 @@
-/* global browser, before, Terra */
-
-const viewports = Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 const rules = { label: { enabled: false } };
+const formFactor = browser.options.formFactor;
+const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 
 viewports.forEach((viewport) => {
-  describe('Onset Picker', () => {
-    before(() => {
-      browser.setViewportSize(viewport);
-    });
+  describe('Oneset Picker', () => {
+    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
+
     describe('when unknown precision selected', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
@@ -46,7 +44,9 @@ viewports.forEach((viewport) => {
         browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2010);
+      it('cannot select', () =>{
+        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2010);
+      });
       Terra.should.matchScreenshot();
       Terra.should.beAccessible({ rules });
     });
@@ -57,7 +57,9 @@ viewports.forEach((viewport) => {
         browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2017);
+      it('cannot select', () =>{
+        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2017);
+      });
       Terra.should.matchScreenshot();
       Terra.should.beAccessible({ rules });
     });
@@ -92,7 +94,10 @@ viewports.forEach((viewport) => {
         browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2011);
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="month"] select', 'value', 'February');
+      it('cannot select', () =>{
+        browser.selectByAttribute('[data-terra-clinical-onset-picker="month"] select', 'value', 'February');
+      });
+      
       Terra.should.matchScreenshot();
       Terra.should.beAccessible({ rules });
     });
@@ -104,7 +109,9 @@ viewports.forEach((viewport) => {
         browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2016);
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="month"] select', 'value', 'October');
+      it('cannot select', () =>{
+        browser.selectByAttribute('[data-terra-clinical-onset-picker="month"] select', 'value', 'October');
+      });
       Terra.should.matchScreenshot();
       Terra.should.beAccessible({ rules });
     });
@@ -212,7 +219,9 @@ viewports.forEach((viewport) => {
         browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'years');
+      it('cannot select', () =>{
+        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'years');
+      });
       Terra.should.matchScreenshot();
       Terra.should.beAccessible({ rules });
     });
@@ -223,7 +232,9 @@ viewports.forEach((viewport) => {
         browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'months');
+      it('cannot select', () =>{
+        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'months');
+      });
       Terra.should.matchScreenshot();
       Terra.should.beAccessible({ rules });
     });

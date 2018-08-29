@@ -1,23 +1,23 @@
-/* global browser, before, Terra */
+const formFactor = browser.options.formFactor;
+const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 
-const viewports = Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
+viewports.forEach((viewport) => {
+  describe('Clinical Application', () => {
+    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
 
-describe('Clinical Application', () => {
-  describe('Renders the Application with provided AppDelegate', () => {
-    before(() => {
-      browser.url('/#/raw/tests/terra-clinical-application/clinical-application/default-application');
+    describe('Renders the Application with provided AppDelegate', () => {
+      before(() => browser.url('/#/raw/tests/terra-clinical-application/clinical-application/default-application'));
+
+      Terra.should.matchScreenshot();
+      Terra.should.beAccessible();
     });
 
-    Terra.should.matchScreenshot({ viewports });
-    Terra.should.beAccessible();
-  });
+    describe('Renders the Application without provided AppDelegate', () => {
+      before(() => browser.url('/#/raw/tests/terra-clinical-application/clinical-application/no-app-delegate-application'));
 
-  describe('Renders the Application without provided AppDelegate', () => {
-    before(() => {
-      browser.url('/#/raw/tests/terra-clinical-application/clinical-application/no-app-delegate-application');
+      Terra.should.matchScreenshot();
+      Terra.should.beAccessible();
     });
-
-    Terra.should.matchScreenshot({ viewports });
-    Terra.should.beAccessible();
   });
 });
+
