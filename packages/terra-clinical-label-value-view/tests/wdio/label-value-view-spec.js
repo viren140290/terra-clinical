@@ -2,11 +2,11 @@
 const rules = { 'color-contrast': { enabled: false } };
 
 const formFactor = browser.options.formFactor;
-const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
+const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 
 viewports.forEach((viewport) => {
   describe('Label Value View', () => {
-    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
 
     describe('when no value input is provided', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-label-value-view/clinical-label-value-view/default-label-value-view'));

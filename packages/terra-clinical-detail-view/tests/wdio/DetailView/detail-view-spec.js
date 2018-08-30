@@ -1,11 +1,11 @@
 const formFactor = browser.options.formFactor;
-const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
+const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 const selector = '#root';
 
 viewports.forEach((viewport) => {
   describe('Detail View', () => {
-    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
-    
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
+
     describe('Displays a divided Detail View with provided components', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-detail-view/clinical-detail-view/detail-view/detail-view-divided'));
 

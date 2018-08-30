@@ -4,11 +4,11 @@ const ignoredA11y = {
 };
 
 const formFactor = browser.options.formFactor;
-const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge');
+const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge');
 
 viewports.forEach((viewport) => {
   describe('Item Collection', () => {
-    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
 
     describe('Displays an item collection with all possible elements', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-item-collection/clinical-item-collection/item-collection-all-elements'));

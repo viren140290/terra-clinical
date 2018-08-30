@@ -1,9 +1,9 @@
 const formFactor = browser.options.formFactor;
-const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
+const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 
 viewports.forEach((viewport) => {
   describe('Clinical Item View', () => {
-    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
 
     describe('with one column displays', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/displays-item-view'));

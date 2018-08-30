@@ -1,9 +1,9 @@
 const formFactor = browser.options.formFactor;
-const viewports = formFactor ? [formFactor] : Terra.viewports('tiny', 'medium');
+const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'medium');
 
 viewports.forEach((viewport) => {
   describe('ItemDisplay', () => {
-    before(() => viewports.length > 1 ? browser.setViewportSize(viewport) : null);
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
 
     describe('default', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-item-display/clinical-item-display/display/default-item-display'));
