@@ -1,9 +1,9 @@
-const formFactor = browser.options.formFactor;
+'const formFactor = browser.options.formFactor;
 const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 
 viewports.forEach((viewport) => {
   describe('Clinical Item View', () => {
-    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);'
 
     describe('with one column displays', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/displays-item-view'));
@@ -72,18 +72,20 @@ viewports.forEach((viewport) => {
       Terra.should.beAccessible();
     });
 
-    describe('with the full example truncated - one truncated', () => {
-      before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/overflow-displays-item-view'));
+    if (viewport.name != 'tiny') {
+      describe('with the full example truncated - one truncated', () => {
+        before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/overflow-displays-item-view'));
 
-      Terra.should.matchScreenshot({ selector: '#ItemView-one-truncate' });
-      Terra.should.beAccessible();
-    });
+        Terra.should.matchScreenshot({ selector: '#ItemView-one-truncate' });
+        Terra.should.beAccessible();
+      });
 
-    describe('with the full example truncated - two truncated', () => {
-      before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/overflow-displays-item-view'));
+      describe('with the full example truncated - two truncated', () => {
+        before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/overflow-displays-item-view'));
 
-      Terra.should.matchScreenshot({ selector: '#ItemView-one-truncate' });
-      Terra.should.beAccessible();
-    });
+        Terra.should.matchScreenshot({ selector: '#ItemView-one-truncate' });
+        Terra.should.beAccessible();
+      });
+    }
   });
 });
