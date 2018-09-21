@@ -3,7 +3,7 @@ const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('ti
 
 viewports.forEach((viewport) => {
   describe('Clinical Item View', () => {
-    before(() => !formFactor ? browser.setViewportSize(viewport) : null);'
+    before(() => !formFactor ? browser.setViewportSize(viewport) : null);
 
     describe('with one column displays', () => {
       before(() => browser.url('/#/raw/tests/terra-clinical-item-view/clinical-item-view/displays-item-view'));
