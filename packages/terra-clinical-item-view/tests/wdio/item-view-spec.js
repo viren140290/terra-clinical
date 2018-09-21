@@ -1,4 +1,4 @@
-'const formFactor = browser.options.formFactor;
+const formFactor = browser.options.formFactor;
 const viewports = formFactor ? Terra.viewports(formFactor) : Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
 
 viewports.forEach((viewport) => {
