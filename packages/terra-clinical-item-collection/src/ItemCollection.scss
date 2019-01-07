@@ -7,6 +7,19 @@
     width: 40px;
   }
 
+  .chevron {
+    display: flex;
+    padding-left: 10px;
+
+    > svg {
+      color: var(--terra-clinical-item-collection-list-chevron-color, #bcbfc0);
+    }
+  }
+
+  .content-accessory.content-chevron {
+    width: 3em;
+  }
+
   .content-accessory.content-accessory-align-top {
     vertical-align: top;
   }

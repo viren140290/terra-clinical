@@ -30,12 +30,13 @@ const propTypes = {
     numberOfDisplays: PropTypes.number,
     hasComment: PropTypes.bool,
     hasEndAccessory: PropTypes.bool,
+    hasChevron: PropTypes.bool,
   }),
 };
 
 function createTableLayout(requiredElements) {
   const {
-    hasStartAccessory, numberOfDisplays, hasComment, hasEndAccessory,
+    hasStartAccessory, numberOfDisplays, hasComment, hasEndAccessory, hasChevron,
   } = requiredElements;
 
   const displays = [];
@@ -51,6 +52,7 @@ function createTableLayout(requiredElements) {
       {displays}
       {hasComment && <col data-terra-clinical-item-collection-comment-column />}
       {hasEndAccessory && <col data-terra-clinical-item-collection-end-accessory-column />}
+      {hasChevron && <col data-terra-clinical-item-collection-chevron-column />}
     </colgroup>
   );
 }

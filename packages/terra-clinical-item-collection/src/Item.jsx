@@ -5,6 +5,7 @@ import ItemView from 'terra-clinical-item-view';
 import List from 'terra-list';
 import Table from 'terra-table';
 import 'terra-base/lib/baseStyles';
+import ChevronRight from 'terra-icon/lib/icon/IconChevronRight';
 import styles from './ItemCollection.scss';
 
 const cx = classNames.bind(styles);
@@ -57,6 +58,7 @@ const propTypes = {
    * a single selectable list.
    */
   showListItemChevron: PropTypes.bool,
+  showTableRowChevron: PropTypes.bool,
   /**
    * Whether or not the item is selectable. If true, the item is given list and table hover and focus styles
    * and set tabIndex to 0.
@@ -85,10 +87,11 @@ const defaultProps = {
   listItemTextEmphasis: 'default',
   reserveStartAccessorySpace: false,
   showListItemChevron: false,
+  showTableRowChevron: false,
   view: 'list',
 };
 
-function createListItem(elements, selectableProps, customProps, isSelected, itemViewStyles, showListItemChevron) {
+function createListItem(elements, selectableProps, customProps, isSelected, itemViewStyles, showListItemChevron, showTableRowChevron) {
   const {
     startAccessory, children, comment, endAccessory, reserveStartAccessorySpace,
   } = elements;
@@ -108,7 +111,7 @@ function createListItem(elements, selectableProps, customProps, isSelected, item
     <List.Item
       content={listItemContent}
       isSelected={isSelected}
-      hasChevron={showListItemChevron}
+      hasChevron={showListItemChevron || showTableRowChevron}
       {...selectableProps}
       {...customProps}
     />
@@ -118,6 +121,7 @@ function createListItem(elements, selectableProps, customProps, isSelected, item
 function createTableCell(content, keyValue, contentType, accessoryAlignment) {
   const cellClassNames = cx(
     `content-${contentType}`,
+    { 'content-chevron': keyValue === 'chevron' },
     { 'content-end-accessory': keyValue === 'end_accessory' },
     { 'content-accessory-align-center': (contentType.includes('accessory') && accessoryAlignment === 'alignCenter') },
     { 'content-accessory-align-top': (contentType.includes('accessory') && accessoryAlignment === 'alignTop') },
@@ -126,10 +130,12 @@ function createTableCell(content, keyValue, contentType, accessoryAlignment) {
   return (<Table.Cell content={content} key={keyValue} className={cellClassNames} />);
 }
 
-function createTableRow(elements, selectableProps, customProps, isSelected, accessoryAlignment) {
+function createTableRow(elements, selectableProps, customProps, isSelected, accessoryAlignment, showTableRowChevron) {
   const {
     startAccessory, children, comment, endAccessory,
   } = elements;
+
+  const chevron = <span className={cx('chevron')}><ChevronRight height="0.8em" width="0.8em" /></span>;
 
   const displayContent = React.Children.map(children, (display, index) => {
     const displayKey = `display_${index + 1}`;
@@ -142,6 +148,7 @@ function createTableRow(elements, selectableProps, customProps, isSelected, acce
       {displayContent}
       {comment && createTableCell(comment, 'comment', 'comment')}
       {endAccessory && createTableCell(endAccessory, 'end_accessory', 'accessory', accessoryAlignment)}
+      {showTableRowChevron ? chevron && createTableCell(chevron, 'chevron', 'accessory', accessoryAlignment) : createTableCell(<span />, 'chevron', 'accessory', accessoryAlignment)}
     </Table.Row>
   );
 }
@@ -160,6 +167,7 @@ const Item = (props) => {
     listItemTextEmphasis,
     reserveStartAccessorySpace,
     showListItemChevron,
+    showTableRowChevron,
     view,
     ...customProps
   } = props;
@@ -170,13 +178,13 @@ const Item = (props) => {
   const selectableProps = isSelectable ? { isSelectable, tabIndex: 0 } : {};
 
   if (view === 'table') {
-    return createTableRow(elements, selectableProps, customProps, isSelected, accessoryAlignment);
+    return createTableRow(elements, selectableProps, customProps, isSelected, accessoryAlignment, showTableRowChevron);
   }
 
   const itemViewStyles = {
     layout: listItemLayout, textEmphasis: listItemTextEmphasis, isTruncated: isListItemTruncated, accessoryAlignment,
   };
-  return createListItem(elements, selectableProps, customProps, isSelected, itemViewStyles, showListItemChevron);
+  return createListItem(elements, selectableProps, customProps, isSelected, itemViewStyles, showListItemChevron, showTableRowChevron);
 };
 
 Item.propTypes = propTypes;

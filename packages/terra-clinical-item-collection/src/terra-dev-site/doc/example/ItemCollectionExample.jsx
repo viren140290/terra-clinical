@@ -31,6 +31,7 @@ const DefaultItemCollection = () => (
       startAccessory={startAccessory}
       comment={comment}
       endAccessory={endAccessory}
+      showTableRowChevron
     >
       <ItemCollection.Display icon={<IconPerson />} text="Asif Khan" textStyle="attention" />
       {display2}
@@ -44,6 +45,7 @@ const DefaultItemCollection = () => (
       comment={comment}
       endAccessory={endAccessory}
       listItemLayout="twoColumns"
+      showTableRowChevron
     >
       {display1}
       {display2}
