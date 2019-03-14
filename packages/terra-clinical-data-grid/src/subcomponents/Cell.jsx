@@ -11,6 +11,10 @@ const cx = classNames.bind(styles);
 
 const propTypes = {
   /**
+   * Accessible text provided for the Cell.
+   */
+  ariaLabel: PropTypes.string,
+  /**
    * String identifier of the section in which the Cell will be rendered.
    */
   sectionId: PropTypes.string.isRequired,
@@ -123,7 +127,7 @@ class Cell extends React.Component {
         {...customProps}
         className={cx(['container', customProps.className])}
         style={this.getCellStyles(width)}
-        aria-selected={isSelected}
+        aria-selected={isSelected ? true : undefined}
       >
         <div
           role="button"

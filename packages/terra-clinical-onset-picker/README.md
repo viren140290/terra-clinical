@@ -14,9 +14,15 @@ The terra-clinical-onset-picker component provides users a way to enter or selec
 
 - Install from [npmjs](https://www.npmjs.com): `npm install terra-clinical-onset-picker`
 
+## I18n Support
+
+This component supports locales defined in the Terra component standards, except Arabic.
+
+* [Internationalization Support](https://github.com/cerner/terra-ui/blob/master/src/terra-dev-site/contributing/ComponentStandards.e.contributing.md#internationalization-i18n-support)
+
 ## LICENSE
 
-Copyright 2017 Cerner Innovation, Inc.
+Copyright 2017 - 2019 Cerner Innovation, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

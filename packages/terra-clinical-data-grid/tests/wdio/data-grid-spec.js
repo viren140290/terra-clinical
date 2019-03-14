@@ -9,6 +9,7 @@ const themedProperties = {
   '--terra-clinical-data-grid-cell-border-right': '2px solid black',
   '--terra-clinical-data-grid-cell-hover-background-color': 'lightblue',
   '--terra-clinical-data-grid-cell-selected-background-color': 'brown',
+  '--terra-clinical-data-grid-cell-selected-focus-background-color': 'brown',
   '--terra-clinical-data-grid-cell-selected-hover-background-color': 'darkblue',
   '--terra-clinical-data-grid-header-cell-border-right': '3px solid black',
   '--terra-clinical-data-grid-column-header-text-color': 'green',
@@ -23,12 +24,15 @@ const themedProperties = {
   '--terra-clinical-data-grid-row-selected-hover-background-color': 'salmon',
   '--terra-clinical-data-grid-scrollbar-height': '20px',
   '--terra-clinical-data-grid-scrollbar-hover-height': '30px',
-  '--terra-clinical-data-grid-scrollbar-color': 'purple',
-  '--terra-clinical-data-grid-scrollbar-border-radius': '0px',
-  '--terra-clinical-data-grid-scrollbar-active-color': 'darkgreen',
+  '--terra-clinical-data-grid-scrollbar-handle-background-color': 'purple',
+  '--terra-clinical-data-grid-scrollbar-handle-border-radius': '0px',
+  '--terra-clinical-data-grid-scrollbar-handle-active-background-color': 'darkgreen',
   '--terra-clinical-data-grid-section-header-background-color': 'yellow',
   '--terra-clinical-data-grid-section-header-border-bottom': 'blueviolet',
   '--terra-clinical-data-grid-section-header-hover-background-color': 'green',
+  '--terra-clinical-data-grid-scrollbar-pinned-column-box-shadow': '0 0 12px 0 blue, inset -1px 0 0 0 blue',
+  '--terra-clinical-data-grid-row-selection-icon-height': '2rem',
+  '--terra-clinical-data-grid-row-selection-icon-width': '2rem',
 };
 
 ['medium', 'huge'].forEach((viewport) => {
@@ -67,6 +71,42 @@ const themedProperties = {
         });
 
         Terra.should.matchScreenshot('#pinned-and-overflow', { selector: '#standard-data-grid' });
+        Terra.should.beAccessible();
+      });
+    });
+
+    describe('with fill disabled', () => {
+      describe('with initial rendering', () => {
+        beforeEach(() => {
+          browser.url('/#/raw/tests/terra-clinical-data-grid/clinical-data-grid/no-fill-data-grid');
+        });
+
+        Terra.should.matchScreenshot('#no-fill', { selector: '#no-fill-data-grid' });
+        Terra.should.beAccessible();
+        Terra.should.themeCombinationOfCustomProperties({
+          testName: 'themed with no fill',
+          selector: '#no-fill-data-grid',
+          properties: themedProperties,
+        });
+      });
+
+      describe('with horizontal overflow', () => {
+        beforeEach(() => {
+          browser.url('/#/raw/tests/terra-clinical-data-grid/clinical-data-grid/no-fill-data-grid');
+          browser.click('[data-cell-label="section_0-0-Column-12"]');
+        });
+
+        Terra.should.matchScreenshot('#no-fill', { selector: '#no-fill-data-grid' });
+        Terra.should.beAccessible();
+      });
+
+      describe('with vertical overflow', () => {
+        beforeEach(() => {
+          browser.url('/#/raw/tests/terra-clinical-data-grid/clinical-data-grid/no-fill-data-grid');
+          browser.click('[data-cell-label="section_0-29-Column-12"]');
+        });
+
+        Terra.should.matchScreenshot('#no-fill', { selector: '#no-fill-data-grid' });
         Terra.should.beAccessible();
       });
     });
@@ -221,6 +261,25 @@ const themedProperties = {
         selector: '#selectable-data-grid',
         properties: {
           '--terra-clinical-data-grid-row-hover-background-color': 'blue',
+        },
+      });
+    });
+
+    describe('with selected row hover', () => {
+      beforeEach(() => {
+        browser.url('/#/raw/tests/terra-clinical-data-grid/clinical-data-grid/selectable-data-grid');
+        browser.click('[data-accessibility-id="7"]');
+        browser.moveToObject('[data-accessibility-id="8"]');
+        browser.moveToObject('[data-accessibility-id="7"]');
+      });
+
+      Terra.should.matchScreenshot({ selector: '#selectable-data-grid' });
+      Terra.should.beAccessible();
+      Terra.should.themeCombinationOfCustomProperties({
+        testName: 'themed',
+        selector: '#selectable-data-grid',
+        properties: {
+          '--terra-clinical-data-grid-row-selected-hover-background-color': 'salmon',
         },
       });
     });

@@ -1,15 +1,18 @@
-const viewports = Terra.viewports('tiny', 'small', 'medium', 'large', 'huge', 'enormous');
-const rules = { label: { enabled: false } };
+const viewports = Terra.viewports('tiny', 'medium', 'enormous');
+// Color contrast rule disabled due to https://github.com/cerner/terra-core/issues/1917
+const rules = { 'color-contrast': { enabled: false } };
 
 viewports.forEach((viewport) => {
-  describe('Onset Picker', () => {
+  describe(`Onset Picker [${viewport}]`, () => {
     before(() => {
       browser.setViewportSize(viewport);
     });
-    describe('when unknown precision selected', () => {
+
+    describe('When unknown precision selected', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-precision"]', 'value', 'unknown');
+        browser.click('#test-precision-select');
+        browser.click('#terra-select-option-unknown');
       });
 
       Terra.should.matchScreenshot();
@@ -20,7 +23,8 @@ viewports.forEach((viewport) => {
     describe('Displays year selection only when Year granularity selected', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-year');
       });
 
       Terra.should.matchScreenshot();
@@ -30,8 +34,11 @@ viewports.forEach((viewport) => {
     describe('Can select a year between the birthdate and current year', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2015);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-year');
+
+        browser.click('#test-year-select');
+        browser.click('#terra-select-option-2015');
       });
 
       Terra.should.matchScreenshot();
@@ -41,22 +48,36 @@ viewports.forEach((viewport) => {
     describe('Cannot select a year before the birthdate', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-year');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2010);
-      Terra.should.matchScreenshot();
+      it('does not show a year before birthdate', () => {
+        browser.click('#test-year-select');
+        browser.isExisting('#terra-select-option-2010').should.equal(false);
+        // move the mouse to prevent mis-match with hover styling
+        browser.moveToObject('#terra-select-option-2011');
+      });
+
+      Terra.should.matchScreenshot({ selector: '#root' });
       Terra.should.beAccessible({ rules });
     });
 
     describe('Cannot select a year in the future', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-year');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2017);
-      Terra.should.matchScreenshot();
+      it('does not show a year in the future', () => {
+        browser.click('#test-year-select');
+        browser.isExisting('#terra-select-option-2017').should.equal(false);
+        // move the mouse to prevent mis-match with hover styling
+        browser.moveToObject('#terra-select-option-2016');
+      });
+
+      Terra.should.matchScreenshot({ selector: '#root' });
       Terra.should.beAccessible({ rules });
     });
 
@@ -64,7 +85,8 @@ viewports.forEach((viewport) => {
     describe('Displays month and year selection only when Month-Year granularity selected', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'month');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-month');
       });
 
       Terra.should.matchScreenshot();
@@ -74,9 +96,14 @@ viewports.forEach((viewport) => {
     describe('Can select a month between the birthdate and current date', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'month');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2015);
-        browser.selectByVisibleText('[data-terra-clinical-onset-picker="month"] select', 'April');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-month');
+
+        browser.click('#test-year-select');
+        browser.click('#terra-select-option-2015');
+
+        browser.click('#test-month-select');
+        browser.click('#terra-select-option-3');
       });
 
       Terra.should.matchScreenshot();
@@ -86,24 +113,42 @@ viewports.forEach((viewport) => {
     describe('Cannot select a month before the birthdate', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'month');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2011);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-month');
+
+        browser.click('#test-year-select');
+        browser.click('#terra-select-option-2011');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="month"] select', 'value', 'February');
-      Terra.should.matchScreenshot();
+      it('does not show a month before the birthdate', () => {
+        browser.click('#test-month-select');
+        browser.isExisting('#terra-select-option-1').should.equal(false);
+        // move the mouse to prevent mis-match with hover styling
+        browser.moveToObject('#terra-select-option-8');
+      });
+
+      Terra.should.matchScreenshot({ selector: '#root' });
       Terra.should.beAccessible({ rules });
     });
 
     describe('Cannot select a month in the future', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'month');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2016);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-month');
+
+        browser.click('#test-year-select');
+        browser.click('#terra-select-option-2016');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="month"] select', 'value', 'October');
-      Terra.should.matchScreenshot();
+      it('does not show a month in the future', () => {
+        browser.click('#test-month-select');
+        browser.isExisting('#terra-select-option-9').should.equal(false);
+        // move the mouse to prevent mis-match with hover styling
+        browser.moveToObject('#terra-select-option-8');
+      });
+
+      Terra.should.matchScreenshot({ selector: '#root' });
       Terra.should.beAccessible({ rules });
     });
 
@@ -111,7 +156,8 @@ viewports.forEach((viewport) => {
     describe('Displays date input when Date granularity is selected', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'date');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-date');
       });
 
       Terra.should.matchScreenshot();
@@ -122,7 +168,8 @@ viewports.forEach((viewport) => {
     describe('Displays age inputs when Age granularity is selected', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/default');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
       });
 
       Terra.should.matchScreenshot();
@@ -132,10 +179,14 @@ viewports.forEach((viewport) => {
     describe('Cannot select number of years greater than age', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'years');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 10);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-years');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 10);
         browser.click('button[type="submit"]');
         browser.pause(2900);
       });
@@ -147,10 +198,14 @@ viewports.forEach((viewport) => {
     describe('Cannot select more than 24 months', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'months');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 30);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-months');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 30);
         browser.click('button[type="submit"]');
         browser.pause(2900);
       });
@@ -162,10 +217,14 @@ viewports.forEach((viewport) => {
     describe('Cannot select number of months that exceede age', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/less-year');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'months');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 20);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-months');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 20);
         browser.click('button[type="submit"]');
         browser.pause(2900);
       });
@@ -177,10 +236,14 @@ viewports.forEach((viewport) => {
     describe('Cannot select more than 8 weeks', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'weeks');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 15);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-weeks');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 15);
         browser.click('button[type="submit"]');
         browser.pause(2900);
       });
@@ -192,10 +255,14 @@ viewports.forEach((viewport) => {
     describe('Cannot select number of weeks that exceede age', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/less-month');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'weeks');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 6);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-weeks');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 6);
         browser.click('button[type="submit"]');
         browser.pause(2900);
       });
@@ -207,30 +274,41 @@ viewports.forEach((viewport) => {
     describe('Cannot select years duration if age is less than a year old', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/less-year');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'years');
-      Terra.should.matchScreenshot();
+      it('does not show years if less than a year old', () => {
+        browser.click('#test-age-unit-select');
+        browser.isExisting('#terra-select-option-years').should.equal(false);
+      });
+
+      Terra.should.matchScreenshot({ selector: '#root' });
       Terra.should.beAccessible({ rules });
     });
 
     describe('Cannot select months duration if age is less than a month old', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/less-month');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
       });
 
-      browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'months');
-      Terra.should.matchScreenshot();
+      it('does not show months if less than a month old', () => {
+        browser.click('#test-age-unit-select');
+        browser.isExisting('#terra-select-option-months').should.equal(false);
+      });
+
+      Terra.should.matchScreenshot({ selector: '#root' });
       Terra.should.beAccessible({ rules });
     });
 
-    // onChange Handlers
-    describe('When precision is changed an event is fired to the precisionSelectOnChange callback', () => {
+    // onChange Handler
+    describe('When precision is changed an event is fired to the onsetOnChange callback', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-precision"]', 'value', 'unknown');
+        browser.click('#test-precision-select');
+        browser.click('#terra-select-option-unknown');
         browser.click('button[type="submit"]');
       });
 
@@ -238,10 +316,11 @@ viewports.forEach((viewport) => {
       Terra.should.beAccessible({ rules });
     });
 
-    describe('When granularity is changed an event is fired to the granularitySelectOnChange callback', () => {
+    describe('When granularity is changed an event is fired to the onsetOnChange callback', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
         browser.click('button[type="submit"]');
       });
 
@@ -249,11 +328,14 @@ viewports.forEach((viewport) => {
       Terra.should.beAccessible({ rules });
     });
 
-    describe('When onsetDate is changed by the month select an event is fired to the onsetDateInputOnChange callback', () => {
+    describe('When onsetDate is changed by the month select an event is fired to the onsetOnChange callback', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'month');
-        browser.selectByVisibleText('[data-terra-clinical-onset-picker="month"] select', 'October');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-month');
+
+        browser.click('#test-month-select');
+        browser.click('#terra-select-option-9');
         browser.click('button[type="submit"]');
       });
 
@@ -261,11 +343,14 @@ viewports.forEach((viewport) => {
       Terra.should.beAccessible({ rules });
     });
 
-    describe('When onsetDate is changed by the year select an event is fired to the onsetDateInputOnChange callback', () => {
+    describe('When onsetDate is changed by the year select an event is fired to the onsetOnChange callback', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'year');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="year"] select', 'value', 2016);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-year');
+
+        browser.click('#test-year-select');
+        browser.click('#terra-select-option-2016');
         browser.click('button[type="submit"]');
       });
 
@@ -273,13 +358,17 @@ viewports.forEach((viewport) => {
       Terra.should.beAccessible({ rules });
     });
 
-    describe('When onsetDate is changed by the age input an event is fired to the onsetDateInputOnChange callback', () => {
+    describe('When onsetDate is changed by the age input an event is fired to the onsetOnChange callback', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'years');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 4);
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-years');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 4);
         browser.click('button[type="submit"]');
       });
 
@@ -287,13 +376,17 @@ viewports.forEach((viewport) => {
       Terra.should.beAccessible({ rules });
     });
 
-    describe('When onsetDate is changed by the ageUnit select an event is fired to the onsetDateInputOnChange callback', () => {
+    describe('When onsetDate is changed by the ageUnit select an event is fired to the onsetOnChange callback', () => {
       before(() => {
         browser.url('/#/raw/tests/terra-clinical-onset-picker/clinical-onset-picker/five-years');
-        browser.selectByAttribute('[name*="test-granularity"]', 'value', 'age');
-        browser.clearElement('[data-terra-clinical-onset-picker="age"] input');
-        browser.setValue('[data-terra-clinical-onset-picker="age"] input', 4);
-        browser.selectByAttribute('[data-terra-clinical-onset-picker="age_unit"] select', 'value', 'years');
+        browser.click('#test-granularity-select');
+        browser.click('#terra-select-option-age');
+
+        browser.clearElement('#test-age-input');
+        browser.setValue('#test-age-input', 4);
+
+        browser.click('#test-age-unit-select');
+        browser.click('#terra-select-option-years');
         browser.click('button[type="submit"]');
         browser.pause(2900);
       });

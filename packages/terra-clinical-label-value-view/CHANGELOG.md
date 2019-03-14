@@ -4,6 +4,34 @@ ChangeLog
 Unreleased
 ----------
 
+3.3.0 - (February 26, 2019)
+----------
+### Changed
+* Minor dependency updates
+
+3.2.0 - (February 5, 2019)
+----------
+### Changed
+* Minor dependency updates
+
+3.1.0 - (January 22, 2019)
+----------
+### Change
+* Dependency updates
+
+3.0.0 - (January 17, 2019)
+----------
+### Breaking Change
+* Updated css theming variable name to fit linter standards
+
+### Added
+* Changelog dev site doc page
+
+2.17.0 - (November 21, 2018)
+----------
+### Changed
+* Minor dependency updates
+
 2.16.0 - (August 30, 2018)
 ----------
 ### Changed

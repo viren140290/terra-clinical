@@ -9,27 +9,22 @@ class HandledOnsetExample extends React.Component {
     super(props);
 
     this.state = {
-      precision: OnsetPicker.Opts.Precisions.BEFORE,
-      granularity: OnsetPicker.Opts.Granularities.YEAR,
+      precision: 'before',
+      granularity: 'year',
       onsetDate: moment().subtract(2, 'years').format('YYYY-MM-DD'),
     };
 
-    this.handleGranularity = this.handleGranularity.bind(this);
-    this.handlePrecision = this.handlePrecision.bind(this);
     this.handleOnset = this.handleOnset.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleGranularity(granularity) {
-    this.setState({ granularity });
-  }
-
-  handlePrecision(precision) {
-    this.setState({ precision });
-  }
-
-  handleOnset(onsetDate) {
-    this.setState({ onsetDate });
+  handleOnset(onsetObject) {
+    this.setState({
+      precision: onsetObject.precision,
+      granularity: onsetObject.granularity,
+      onsetDate: onsetObject.onsetDate,
+      ageUnit: onsetObject.ageUnit,
+    });
   }
 
   handleSubmit(e) {
@@ -40,6 +35,7 @@ class HandledOnsetExample extends React.Component {
         precision: prevState.precision,
         granularity: prevState.granularity,
         onsetDate: prevState.onsetDate,
+        ageUnit: prevState.ageUnit,
       },
     }));
   }
@@ -48,32 +44,26 @@ class HandledOnsetExample extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <OnsetPicker
-          birthdate={moment().subtract(6, 'years').format()}
+          birthdate={moment().subtract(6, 'years').format('YYYY-MM-DD')}
           granularity={this.state.granularity}
-          granularitySelectName="doogs-supplied-granularity"
-          granularitySelectOnChange={this.handleGranularity}
+          id="doogs-supplied"
           precision={this.state.precision}
           precisionSet={[
-            OnsetPicker.Opts.Precisions.UNKNOWN,
-            OnsetPicker.Opts.Precisions.AFTER,
-            OnsetPicker.Opts.Precisions.BEFORE,
-            OnsetPicker.Opts.Precisions.ONAT,
+            'unknown',
+            'after',
+            'before',
+            'on/at',
           ]}
-          precisionSelectName="doogs-supplied-precision"
-          precisionSelectOnChange={this.handlePrecision}
           onsetDate={this.state.onsetDate}
-          onsetDateInputName="doogs-supplied-onsetDate"
-          onsetDateInputOnChange={this.handleOnset}
+          onsetOnChange={this.handleOnset}
         />
         <button type="submit">Submit</button>
         {this.state.submittedData && (
-        <div>
-          <hr />
-          <p>
-Form was submitted with
-            {JSON.stringify(this.state.submittedData)}
-          </p>
-        </div>
+          <div>
+            <hr />
+            <p>Form was submitted with</p>
+            <p>{JSON.stringify(this.state.submittedData)}</p>
+          </div>
         )}
       </form>
     );

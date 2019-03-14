@@ -4,6 +4,48 @@ ChangeLog
 Unreleased
 ----------
 
+4.0.0 - (March 8, 2019)
+----------
+### Breaking Change
+* Condensed onChange function props into a single prop that returns an Object for the onsetDate.
+* Removed prop `granularitySelectOnChange`
+* Removed prop `precisionSelectOnChange`
+* Removed prop `onsetDateInputOnChange`
+* New prop `ageUnit`
+* New prop `onsetOnChange`
+
+3.4.0 - (February 26, 2019)
+----------
+### Added
+* Added en-AU translations
+
+3.3.0 - (February 5, 2019)
+----------
+### Changed
+* Minor dependency updates
+
+3.2.0 - (January 22, 2019)
+----------
+### Change
+* Dependency updates
+
+3.1.0 - (January 17, 2019)
+----------
+### Added
+* Changelog dev site doc page
+
+3.0.0 - (January 2, 2019)
+-----------------
+### Breaking Change
+* Updated to use new form inputs and selects to support blank defaults - issue #256
+* Resolved crash from issue #396, now returns an empty string if date is blank
+* Condensed props for input/select id's to a shared base id value
+
+2.15.0 - (November 21, 2018)
+----------
+### Changed
+* Minor dependency updates
+
 2.14.0 - (October 2, 2018)
 ----------
 ### Changed

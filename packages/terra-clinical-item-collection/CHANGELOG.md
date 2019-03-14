@@ -1,6 +1,47 @@
 ChangeLog
 =========
 
+Unreleased
+----------
+
+4.1.0 - (February 5, 2019)
+----------
+### Changed
+* Minor dependency updates
+
+4.0.0 - (January 22, 2019)
+----------
+### Change
+* Updated theme variables
+
+3.23.0 - (January 22, 2019)
+----------
+### Changed
+* Updated dependencies to fix major version bump issues
+
+3.22.0 - (January 22, 2019)
+----------
+### Changed
+* Updated dependencies to fix major version bump issues
+
+3.21.0 - (January 17, 2019)
+----------
+### Changed
+* Removed local wdio timeout from clinical-item-collection test
+
+### Added
+* Changelog dev site doc page
+
+3.20.0 - (January 2, 2019)
+-----------------
+### Changed
+* Updated readme to have logically nested headers.
+
+3.19.0 - (November 21, 2018)
+----------
+### Changed
+* Minor dependency updates
+
 3.18.0 - (October 16, 2018)
 -----------------
 ### Changed

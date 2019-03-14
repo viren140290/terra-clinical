@@ -10,37 +10,31 @@ export default class LessYear extends React.Component {
     moment.now = () => new Date(2016, 8, 20);
 
     this.state = {
-      precision: OnsetPicker.Opts.Precisions.ONAT,
-      granularity: OnsetPicker.Opts.Granularities.MONTH,
-      onsetDate: moment(),
+      precision: 'on/at',
+      granularity: 'month',
     };
 
-    this.handleGranularity = this.handleGranularity.bind(this);
-    this.handlePrecision = this.handlePrecision.bind(this);
     this.handleOnset = this.handleOnset.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleGranularity(granularity) {
-    this.setState({ granularity });
-  }
-
-  handlePrecision(precision) {
-    this.setState({ precision });
-  }
-
-  handleOnset(onsetDate) {
-    this.setState({ onsetDate });
+  handleOnset(onsetObject) {
+    this.setState({
+      precision: onsetObject.precision,
+      granularity: onsetObject.granularity,
+      onsetDate: onsetObject.onsetDate,
+      ageUnit: onsetObject.ageUnit,
+    });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-
     this.setState(prevState => ({
       submittedData: {
         precision: prevState.precision,
         granularity: prevState.granularity,
         onsetDate: prevState.onsetDate,
+        ageUnit: prevState.ageUnit,
       },
     }));
   }
@@ -54,13 +48,9 @@ export default class LessYear extends React.Component {
 
         <form onSubmit={this.handleSubmit}>
           <OnsetPicker
-            birthdate={moment().subtract(11, 'months').format()}
-            granularitySelectName="test-granularity"
-            granularitySelectOnChange={this.handleGranularity}
-            precisionSelectName="test-precision"
-            precisionSelectOnChange={this.handlePrecision}
-            onsetDateInputName="test-onsetDate"
-            onsetDateInputOnChange={this.handleOnset}
+            birthdate={moment().subtract(11, 'months').format('YYYY-MM-DD')}
+            id="test"
+            onsetOnChange={this.handleOnset}
           />
           <button type="submit">Submit</button>
         </form>
